@@ -11,9 +11,9 @@ I'm a biostatistician. From October 2026 I'm a PhD student at the MRC Biostatist
 
 Here is what I expect to write about:
 
-- **Statistics and R.** Worked examples of the methods researchers ask me about most, with the code.
-- **Clinical trials.** Adaptive designs, the gap between what is optimal on paper and what runs in practice, and what I learn along the way in the PhD.
-- **The occasional essay** on aviation, geopolitical history, or whatever else has my attention.
+- **R and AI.** Ways in which coding agents can be used responsibly to assist with statistical programming, as well as general R tips and tricks.
+- **Biostatistics and Clinical trials.** Adaptive designs, the gap between what is optimal on paper and what runs in practice, and what I learn along the way in the PhD.
+- **General essays on what interests me.** Topics such as aviation, geopolitical history, or whatever else has my attention.
 
 Technical posts carry their code so you can run them yourself. If you would like new posts delivered, subscribe to the [RSS feed](../index.xml).
 

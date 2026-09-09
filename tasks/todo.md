@@ -25,3 +25,22 @@ Plan: docs/superpowers/plans/2026-09-06-personal-website.md
 **Follow-ups completed 2026-09-07.** Repo renamed to `alexvantwisk.github.io` (PR #18 set the root site URL and dropped the 404 link-check exclusion); Netlify unlinked and its config removed (PR #19); the two-business-day reply promise dropped (PR #20); avantwisk.com registered, DNS set at Porkbun, custom domain and HTTPS enforcement set on Pages, CNAME and site URL merged (PR #21). The github.io address 301-redirects to the domain.
 
 **Open for Alexander.** Optionally align "MSc Biostatistics (Cum Laude)" on the consulting landing with "Passed with Distinction" on the CV; both are his own wording.
+
+## Incident 2026-09-09: site served the README instead of the rendered pages
+
+**Symptom.** https://avantwisk.com/ showed the contents of `README.md` — no navbar, no styling, no pages.
+
+**Cause.** The GitHub Pages source had reverted to the legacy branch builder (`build_type: legacy`, source `main` / `/`). That runs Jekyll over the repo root, where there is no `index.html` — only `index.qmd` — so Jekyll rendered `README.md` as the homepage. A `pages-build-deployment` run at 14:44 UTC published it over the good Actions deploy. The `publish.yml` workflow itself was healthy the whole time; its uploaded `_site` artifact was simply being ignored.
+
+**Fix.** Set the source back to GitHub Actions and redeployed:
+
+```
+gh api -X PUT repos/alexvantwisk/alexvantwisk.github.io/pages -f build_type=workflow
+gh workflow run publish.yml --ref main
+```
+
+The custom domain and the HTTPS certificate survived the change untouched.
+
+**Verified.** Run 34366446987 succeeded (render, offline link check, upload, deploy). `/` serves the styled homepage and `/about.html` — a path the Jekyll build cannot produce — resolves.
+
+**Guard.** This breaks silently: `publish.yml` still goes green while the wrong content is served. If the homepage ever shows the README again, check `gh api repos/alexvantwisk/alexvantwisk.github.io/pages` first and confirm `build_type` is `workflow`. Changing the Pages source in the web UI is what flips it.
